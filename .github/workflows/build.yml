@@ -23,17 +23,8 @@ jobs:
       - name: Generate project
         run: xcodegen generate
 
-      - name: Build
-        run: |
-          xcodebuild \
-            -project MiP-Control.xcodeproj \
-            -scheme MiP-Control \
-            -sdk iphoneos \
-            -configuration Release \
-            -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            build
+      - - name: Build
+  run: xcodebuild -project MiP-Control.xcodeproj -scheme MiP-Control -sdk iphoneos -configuration Release -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO build
 - name: Package IPA
   run: |
     mkdir -p Payload
