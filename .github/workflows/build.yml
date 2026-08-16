@@ -5,29 +5,35 @@ on:
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-26
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepare project
-        shell: bash
+      - name: Select Xcode
         run: |
-          mkdir -p MiP_Control
+          sudo xcode-select -s /Applications/Xcode_26.6.app
+          xcodebuild -version
 
-          mv ContentView.swift MiP_Control/
-          mv MiPBluetooth.swift MiP_Control/
-          mv MiP_ControlApp.swift MiP_Control/
-          mv Info.plist MiP_Control/
+      - name: Check project files
+        run: |
+          echo "=== Repository ==="
+          ls -la
+          echo "=== Swift files ==="
+          find . -maxdepth 2 -name "*.swift" -print
+          echo "=== Project files ==="
+          find . -maxdepth 2 \( -name "project.yml" -o -name "*.xcodeproj" \) -print
 
       - name: Install XcodeGen
-        run: brew install xcodegen
+        run: |
+          brew install xcodegen
 
       - name: Generate Xcode project
-        run: xcodegen generate
+        run: |
+          xcodegen generate
 
-      - name: Build MiP Control
+      - name: Build
         run: |
           xcodebuild \
             -project MiP-Control.xcodeproj \
@@ -40,8 +46,8 @@ jobs:
             build
 
       - name: Package IPA
-        shell: bash
         run: |
+          rm -rf Payload MiP-Control.ipa
           mkdir -p Payload
           cp -R build/Build/Products/Release-iphoneos/MiP-Control.app Payload/
           zip -r MiP-Control.ipa Payload
