@@ -1,0 +1,35 @@
+name: Build MiP Control
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Prepare project
+        run: |
+          mkdir -p MiP_Control
+          mv ContentView.swift MiP_Control/
+          mv MiPBluetooth.swift MiP_Control/
+          mv MiP_ControlApp.swift MiP_Control/
+          mv Info.plist MiP_Control/
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate project
+        run: xcodegen generate
+
+      - name: Build
+        run: |
+          xcodebuild \
+            -project MiP-Control.xcodeproj \
+            -scheme MiP-Control \
+            -sdk iphonesimulator \
+            -configuration Release \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            build
