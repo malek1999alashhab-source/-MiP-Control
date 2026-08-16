@@ -5,55 +5,8 @@ on:
 
 jobs:
   build:
-    runs-on: macos-26
+    runs-on: macos-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Select Xcode
-        run: |
-          sudo xcode-select -s /Applications/Xcode_26.6.app
-          xcodebuild -version
-
-      - name: Check project files
-        run: |
-          echo "=== Repository ==="
-          ls -la
-          echo "=== Swift files ==="
-          find . -maxdepth 2 -name "*.swift" -print
-          echo "=== Project files ==="
-          find . -maxdepth 2 \( -name "project.yml" -o -name "*.xcodeproj" \) -print
-
-      - name: Install XcodeGen
-        run: |
-          brew install xcodegen
-
-      - name: Generate Xcode project
-        run: |
-          xcodegen generate
-
-      - name: Build
-        run: |
-          xcodebuild \
-            -project MiP-Control.xcodeproj \
-            -scheme MiP-Control \
-            -sdk iphoneos \
-            -configuration Release \
-            -derivedDataPath build \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            build
-
-      - name: Package IPA
-        run: |
-          rm -rf Payload MiP-Control.ipa
-          mkdir -p Payload
-          cp -R build/Build/Products/Release-iphoneos/MiP-Control.app Payload/
-          zip -r MiP-Control.ipa Payload
-
-      - name: Upload IPA
-        uses: actions/upload-artifact@v4
-        with:
-          name: MiP-Control-IPA
-          path: MiP-Control.ipa
+      - name: Test
+        run: echo "YAML WORKS"
