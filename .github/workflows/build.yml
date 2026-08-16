@@ -10,39 +10,44 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Prepare project
+        shell: bash
         run: |
           mkdir -p MiP_Control
+
           mv ContentView.swift MiP_Control/
           mv MiPBluetooth.swift MiP_Control/
           mv MiP_ControlApp.swift MiP_Control/
           mv Info.plist MiP_Control/
+
       - name: Install XcodeGen
         run: brew install xcodegen
 
-     - name: Generate project
-    run: xcodegen generate
+      - name: Generate Xcode project
+        run: xcodegen generate
 
-  - name: Build
-    run: |
-      xcodebuild \
-        -project MiP-Control.xcodeproj \
-        -scheme MiP-Control \
-        -sdk iphoneos \
-        -configuration Release \
-        -derivedDataPath build \
-        CODE_SIGNING_ALLOWED=NO \
-        CODE_SIGNING_REQUIRED=NO \
-        build
+      - name: Build MiP Control
+        run: |
+          xcodebuild \
+            -project MiP-Control.xcodeproj \
+            -scheme MiP-Control \
+            -sdk iphoneos \
+            -configuration Release \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            build
 
-  - name: Package IPA
-    run: |
-      mkdir -p Payload
-      cp -R build/Build/Products/Release-iphoneos/MiP-Control.app Payload/
-      zip -r MiP-Control.ipa Payload
+      - name: Package IPA
+        shell: bash
+        run: |
+          mkdir -p Payload
+          cp -R build/Build/Products/Release-iphoneos/MiP-Control.app Payload/
+          zip -r MiP-Control.ipa Payload
 
-  - name: Upload IPA
-    uses: actions/upload-artifact@v4
-    with:
-      name: MiP-Control-IPA
-      path: MiP-Control.ipa   
+      - name: Upload IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: MiP-Control-IPA
+          path: MiP-Control.ipa
