@@ -34,8 +34,14 @@ jobs:
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             build
-      - name: Upload App
-        uses: actions/upload-artifact@v4
-        with:
-          name: MiP-Control-App
-          path: build/Build/Products/Release-iphonesimulator/MiP-Control.app
+- name: Package IPA
+  run: |
+    mkdir -p Payload
+    cp -R build/Build/Products/Release-iphoneos/MiP-Control.app Payload/
+    zip -r MiP-Control.ipa Payload
+
+- name: Upload IPA
+  uses: actions/upload-artifact@v4
+  with:
+    name: MiP-Control-IPA
+    path: MiP-Control.ipa
