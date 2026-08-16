@@ -28,7 +28,7 @@ jobs:
           xcodebuild \
             -project MiP-Control.xcodeproj \
             -scheme MiP-Control \
-            -sdk iphonesimulator \
+            -sdk iphoneos \
             -configuration Release \
             -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO \
