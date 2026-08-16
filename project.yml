@@ -1,0 +1,23 @@
+name: MiP-Control
+options:
+  deploymentTarget:
+    iOS: "16.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: 5.0
+targets:
+  MiP-Control:
+    type: application
+    platform: iOS
+    sources:
+      - path: MiP_Control
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.alaa.mipcontrol
+        INFOPLIST_FILE: MiP_Control/Info.plist
+        CODE_SIGNING_ALLOWED: NO
+        CODE_SIGNING_REQUIRED: NO
+        DEVELOPMENT_TEAM: ""
+    scheme:
+      testTargets: []
